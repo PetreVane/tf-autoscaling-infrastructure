@@ -1,21 +1,37 @@
 
-resource "aws_security_group" "tf-sg-web_allows_8080" {
-  name = "tf-allows-8080"
-  description = "Allows access to port 8080"
-  vpc_id = var.expected_vpc_id
+resource "aws_security_group" "tf-security-group" {
+  name = "tf-security-group"
+  description = "Security group for applications allowing HTTP traffic on port 8080 and SSH access on port 22"
+  vpc_id = var.vpc_id
 
+  // Inbound rule for HTTP traffic on port 8080
   ingress {
-    from_port = 8080
-    to_port   = 8080
-    protocol  = "tcp"
+    description = "HTTP"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  // Inbound rule for HTTP traffic on port 22
+  ingress {
+    description = "HTTP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Default rule for outbound traffic
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol = "-1" # denies outbound traffic
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  tags = {
+    Name = "tf-security-group"
+  }
 }
