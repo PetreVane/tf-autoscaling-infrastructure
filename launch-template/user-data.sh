@@ -1,26 +1,16 @@
 #!/bin/bash
+
 # Update the system
 sudo yum update -y
-# Install Python 3
-sudo yum install -y python3
-# Create a simple Python web server script
-cat > /home/ec2-user/webserver.py << EOF
-import http.server
-import socketserver
 
-PORT = 8080
-Handler = http.server.SimpleHTTPRequestHandler
+# Install Java 17
+sudo yum install java-17-amazon-corretto-headless -y
 
-class CustomHandler(Handler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        self.wfile.write(bytes("Welcome to My Custom SaaS App", "utf8"))
+# Copy the jar artifact to the home directory
+aws s3 cp s3://bucket-from-ec2-instance-connect-3556768/dummy-app/dummy-webapp.jar /home/ec2-user
 
-httpd = socketserver.TCPServer(("", PORT), CustomHandler)
-print("serving at port", PORT)
-httpd.serve_forever()
-EOF
-# Run the web server in the background
-nohup python3 /home/ec2-user/webserver.py > /dev/null 2>&1 &
+# Change permissions
+sudo chown ec2-user:ec2-user /home/ec2-user/dummy-webapp.jar
+
+# Start the application and log the output
+java -jar /home/ec2-user/dummy-webapp.jar 1>/home/ec2-user/log.txt 2>&1 &
