@@ -1,3 +1,4 @@
 output "aws_security_group_id" {
-  value = aws_security_group.tf-sg-web_allows_8080.id
+  value = aws_security_group.tf-security-group.id
+  description = "The ID of the security group."
 }

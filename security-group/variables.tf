@@ -1,4 +1,5 @@
-variable "expected_vpc_id" {
-  type = string
-  description = "The id of the vpc in which this sg will be used"
+
+variable "vpc_id" {
+  description = "The ID of the VPC where the security group will be created."
+  type        = string
 }

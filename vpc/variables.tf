@@ -1,14 +1,15 @@
-variable "az1" {
-  type = string
-  default = "eu-central-1a"
+variable "subnet_cidrs" {
+  type = list(string)
+  description = "List of CIDR blocks for subnets"
 }
 
-variable "az2" {
+variable "vpc_cidr" {
   type = string
-  default = "eu-central-1b"
+  description = "The VPC CIDR block"
 }
 
-variable "az3" {
-  type = string
-  default = "eu-central-1c"
+variable "availability_zone" {
+  type = list(string)
+  description = "A list containing the availability zones in the region"
+  default = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 }
