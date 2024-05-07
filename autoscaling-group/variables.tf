@@ -19,7 +19,12 @@ variable "launch-template-version" {
   description = "The version of the launch template used by ASG"
 }
 
-variable "nlb-target-group-arn" {
+variable "alb-target-group-arn" {
   type = string
   description = "The arn of the target group"
+}
+
+variable "aws_subnets_ids" {
+  type = list(string)
+  description = "List of subnets ids"
 }
