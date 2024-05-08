@@ -1,5 +1,5 @@
 
-```markdown
+
 # AWS Auto Scaling Infrastructure
 
 ## Project Overview
@@ -72,6 +72,6 @@ terraform apply
    ```
 terraform destroy
    ```
-```
+
 
 
