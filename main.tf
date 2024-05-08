@@ -50,3 +50,11 @@ module "target-group" {
   source = "./target-group"
   vpc-id = module.vpc.vpc_id
 }
+
+module "application-load-balancer" {
+  source = "./load-balancer"
+  security_group_id = module.security-group.aws_security_group_id
+  subnet_ids = module.vpc.subnets_ids
+  port = 8080
+  target_group_arn = module.target-group.target-group-arn
+}
