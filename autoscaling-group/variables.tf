@@ -4,10 +4,10 @@ variable "launch-template-version" {
   description = "The version of the launch template used by ASG"
 }
 
-# variable "alb-target-group-arn" {
-#   type = string
-#   description = "The arn of the target group"
-# }
+variable "alb-target-group-arn" {
+  type = string
+  description = "The arn of the target group"
+}
 
 variable "launch-template-id" {
   description = "The ID of the launch template to use with the auto scaling group"

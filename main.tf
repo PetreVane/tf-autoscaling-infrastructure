@@ -43,6 +43,10 @@ module "autoscaling-group" {
   min-size                = "1"
   desired-capacity        = "1"
   max-size                = "3"
-  #   alb-target-group-arn    = "fix me"
+  alb-target-group-arn    = module.target-group.target-group-arn
 }
 
+module "target-group" {
+  source = "./target-group"
+  vpc-id = module.vpc.vpc_id
+}
