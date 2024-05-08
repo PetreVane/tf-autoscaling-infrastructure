@@ -4,7 +4,11 @@
 
 ## Project Overview
 
-This Terraform project sets up a complete AWS environment designed for a high-availability application using an Application Load Balancer (ALB), Auto Scaling Group (ASG), and dynamic scaling policies based on application load (ALB request count). The infrastructure automatically adjusts to the incoming traffic, ensuring efficient resource utilization and maintaining performance during demand spikes or declines.
+This Terraform project sets up a complete AWS environment designed for a high-availability application using an Application Load Balancer (ALB), 
+Auto Scaling Group (ASG), and dynamic scaling policies based on application load (ALB request count). 
+The infrastructure automatically adjusts to the incoming traffic, ensuring efficient resource utilization and maintaining performance during demand spikes or declines.
+
+If you want to see the application code of the (app) jar file stored in the s3 bucket, [look here](https://github.com/PetreVane/dummy-app) 
 
 ## Prerequisites
 
