@@ -19,7 +19,7 @@ resource "aws_subnet" "tf-public-subnet" {
   availability_zone = var.availability_zone[count.index]
   map_public_ip_on_launch = true
   tags = {
-    Name = "Tf-public-subnet-${count.index + 1}"
+    Name = "tf-public-subnet-${count.index + 1}"
   }
 }
 

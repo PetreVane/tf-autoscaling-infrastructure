@@ -2,6 +2,7 @@ provider "aws" {
   region = var.region
 }
 
+
 module "s3" {
   source        = "./s3"
   bucket_name   = "tf-bucket-07may24"
@@ -57,4 +58,15 @@ module "application-load-balancer" {
   subnet_ids = module.vpc.subnets_ids
   port = 8080
   target_group_arn = module.target-group.target-group-arn
+}
+
+module "scaling-policy" {
+  source = "./scaling-policy"
+  autoscaling-group-name = module.autoscaling-group.autoscaling-group-name
+  target-group-name = module.target-group.target-group-name
+  target-group-id = module.target-group.target-group-id
+  load-balancer-type = module.application-load-balancer.load-balancer-type
+  load-balancer-arn = module.application-load-balancer.load-balancer-arn
+  load-balancer-name = module.application-load-balancer.load-balancer-name
+  load-balancer-id = module.application-load-balancer.load-balancer-id
 }
