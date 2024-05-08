@@ -9,7 +9,7 @@ output "target-group-name" {
   value = aws_lb_target_group.tf-target-group.name
 }
 
-output "target-group-id" {
-  description = "The id of the target group"
-  value = aws_lb_target_group.tf-target-group.id
+output "target-group-arn-suffix" {
+  description = "The arn suffix of the target group"
+  value = aws_lb_target_group.tf-target-group.arn_suffix
 }

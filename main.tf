@@ -64,9 +64,9 @@ module "scaling-policy" {
   source = "./scaling-policy"
   autoscaling-group-name = module.autoscaling-group.autoscaling-group-name
   target-group-name = module.target-group.target-group-name
-  target-group-id = module.target-group.target-group-id
+  target-group-arn-suffix = module.target-group.target-group-arn-suffix
   load-balancer-type = module.application-load-balancer.load-balancer-type
   load-balancer-arn = module.application-load-balancer.load-balancer-arn
   load-balancer-name = module.application-load-balancer.load-balancer-name
-  load-balancer-id = module.application-load-balancer.load-balancer-id
+  load-balancer-arn-suffix = module.application-load-balancer.load-balancer-arn-suffix
 }

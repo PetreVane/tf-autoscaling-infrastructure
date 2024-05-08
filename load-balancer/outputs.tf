@@ -17,6 +17,6 @@ output "load-balancer-name" {
   value = aws_lb.tf-application-load-balancer.name
 }
 
-output "load-balancer-id" {
-  value = aws_lb.tf-application-load-balancer.id
+output "load-balancer-arn-suffix" {
+  value = aws_lb.tf-application-load-balancer.arn_suffix
 }

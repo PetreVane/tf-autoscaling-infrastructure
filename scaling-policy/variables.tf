@@ -9,7 +9,7 @@ variable "target-group-name" {
   description = "The name of the target group"
 }
 
-variable "target-group-id" {
+variable "target-group-arn-suffix" {
   type = string
   description = "The id of the target group"
 }
@@ -28,7 +28,7 @@ variable "load-balancer-name" {
   description = "The name of the ALB"
 }
 
-variable "load-balancer-id" {
+variable "load-balancer-arn-suffix" {
   type = string
   description = "The ALB id"
 }
