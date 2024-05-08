@@ -43,13 +43,12 @@ data "template_file" "init-script" {
 
 resource "aws_launch_template" "tf-launch_template" {
   name_prefix = "tf-launch-template"
-
   image_id = data.aws_ami.selected_ami.id
   instance_type = var.instance_type
   vpc_security_group_ids = [var.aws_security_group_id]
 
   iam_instance_profile {
-    name = var.iam_role_name
+    name = var.iam_instance_profile_name
   }
 
   user_data = base64encode(data.template_file.init-script.rendered)

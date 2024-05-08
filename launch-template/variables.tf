@@ -24,3 +24,8 @@ variable "jar_file_key" {
   type = string
   description = "The jar artifact object key"
 }
+
+variable "iam_instance_profile_name" {
+  type = string
+  description = "The Instance Profile Name attached to ec2 instances"
+}
