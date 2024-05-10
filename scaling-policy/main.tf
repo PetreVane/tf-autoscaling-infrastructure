@@ -9,7 +9,6 @@ resource "aws_autoscaling_policy" "tf-target-tracking-policy" {
     target_value             = 20 # 20 requests/ instance for a given period of time
     predefined_metric_specification {
       predefined_metric_type = "ALBRequestCountPerTarget"
-#       resource_label = "app/${var.load-balancer-name}/${var.load-balancer-id}/targetgroup/${var.target-group-name}/${var.target-group-id}"
       resource_label = "${var.load-balancer-arn-suffix}/${var.target-group-arn-suffix}"
     }
   }
