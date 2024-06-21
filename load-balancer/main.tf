@@ -1,6 +1,10 @@
+resource "random_id" "alb_id" {
+  byte_length = 4
+}
+
 
 resource "aws_lb" "tf-application-load-balancer" {
-  name = "tf-application-load-balancer"
+  name = "tf-alb-${random_id.alb_id.hex}"
   internal = false
   load_balancer_type = "application"
   security_groups = [var.security_group_id]

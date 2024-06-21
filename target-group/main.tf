@@ -1,7 +1,11 @@
 
+resource "random_id" "generator" {
+  byte_length = 4
+}
+
 resource "aws_lb_target_group" "tf-target-group" {
 
-  name = "tf-alb-target-group"
+  name = "tf-alb-target-group-${random_id.generator.hex}"
   port = var.port
   protocol = var.protocol
   vpc_id = var.vpc-id
