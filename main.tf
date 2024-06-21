@@ -2,6 +2,15 @@ provider "aws" {
   region = var.region
 }
 
+# terraform {
+#   cloud {
+#     organization = "orbsec"
+#
+#     workspaces {
+#       name = "tf-autoscaling-infrastructure"
+#     }
+#   }
+# }
 
 module "s3" {
   source        = "./s3"
