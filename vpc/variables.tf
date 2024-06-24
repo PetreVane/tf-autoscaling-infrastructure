@@ -1,3 +1,8 @@
+variable "region" {
+  type = string
+  description = "The aws region"
+}
+
 
 variable "subnet_cidrs" {
   type = list(string)
@@ -12,5 +17,4 @@ variable "vpc_cidr" {
 variable "availability_zone" {
   type = list(string)
   description = "A list containing the availability zones in the region"
-  default = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 }
