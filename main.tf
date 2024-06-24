@@ -50,7 +50,7 @@ module "security-group" {
 
 module "launch-template" {
   source                    = "./launch-template"
-  instance_type             = "t2.micro"
+  instance_type             = var.instance_type
   aws_security_group_id     = module.security-group.aws_security_group_id
   iam_role_name             = module.iam.iam_role_name
   bucket_name               = module.s3.bucket_id
