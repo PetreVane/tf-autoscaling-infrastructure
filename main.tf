@@ -14,14 +14,25 @@ provider "aws" {
 
 module "s3" {
   source        = "./s3"
-  bucket_name   = "tf-bucket-07may24"
+  bucket_name   = "tf-bucket-${var.region}"
   jar_file_name = "dummy-webapp.jar"
   jar_file_path = "./s3/jar/dummy-webapp.jar"
+  lambda_zip_name = module.lambda.lambda_zip_file_name
+  lambda_zip_file_path = "./s3/lambda/lambda.zip"
+}
+
+module "sns" {
+  source = "./sns"
+}
+
+module "ssm" {
+  source = "./ssm"
 }
 
 module "iam" {
-  source              = "./iam"
-  expected-bucket-arn = "${module.s3.s3_bucket_arn}/*"
+  source                 = "./iam"
+  expected-bucket-arn    = "${module.s3.s3_bucket_arn}/*"
+  expected_sns_topic_arn = module.sns.sns_topic_arn
 }
 
 module "vpc" {
@@ -40,7 +51,7 @@ module "launch-template" {
   instance_type             = "t2.micro"
   aws_security_group_id     = module.security-group.aws_security_group_id
   iam_role_name             = module.iam.iam_role_name
-  bucket_name               = module.s3.bucket_name
+  bucket_name               = module.s3.bucket_id
   jar_file_key              = module.s3.jar_file_key
   iam_instance_profile_name = module.iam.iam_instance_profile_name
 }
@@ -62,20 +73,31 @@ module "target-group" {
 }
 
 module "application-load-balancer" {
-  source = "./load-balancer"
+  source            = "./load-balancer"
   security_group_id = module.security-group.aws_security_group_id
-  subnet_ids = module.vpc.subnets_ids
-  port = 8080
-  target_group_arn = module.target-group.target-group-arn
+  subnet_ids        = module.vpc.subnets_ids
+  port              = 8080
+  target_group_arn  = module.target-group.target-group-arn
 }
 
 module "scaling-policy" {
-  source = "./scaling-policy"
-  autoscaling-group-name = module.autoscaling-group.autoscaling-group-name
-  target-group-name = module.target-group.target-group-name
-  target-group-arn-suffix = module.target-group.target-group-arn-suffix
-  load-balancer-type = module.application-load-balancer.load-balancer-type
-  load-balancer-arn = module.application-load-balancer.load-balancer-arn
-  load-balancer-name = module.application-load-balancer.load-balancer-name
+  source                   = "./scaling-policy"
+  autoscaling-group-name   = module.autoscaling-group.autoscaling-group-name
+  target-group-name        = module.target-group.target-group-name
+  target-group-arn-suffix  = module.target-group.target-group-arn-suffix
+  load-balancer-type       = module.application-load-balancer.load-balancer-type
+  load-balancer-arn        = module.application-load-balancer.load-balancer-arn
+  load-balancer-name       = module.application-load-balancer.load-balancer-name
   load-balancer-arn-suffix = module.application-load-balancer.load-balancer-arn-suffix
+}
+
+module "lambda" {
+  source                  = "./lambda"
+  lambda_trigger_role_arn = module.iam.lambda_trigger_role_arn
+  ssm_document_name       = module.ssm.ssm_document_name
+  asg_name                = module.autoscaling-group.autoscaling-group-name
+  sns_topic_arn           = module.sns.sns_topic_arn
+  bucket_arn              = module.s3.s3_bucket_arn
+  s3_bucket_id            = module.s3.bucket_id
+  s3_key                  = module.s3.lambda_file_key
 }
