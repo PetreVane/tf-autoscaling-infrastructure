@@ -19,6 +19,8 @@ module "s3" {
   jar_file_path = "./s3/jar/dummy-webapp.jar"
   lambda_zip_name = module.lambda.lambda_zip_file_name
   lambda_zip_file_path = "./s3/lambda/lambda.zip"
+  lambda_function_arn = module.lambda.lambda_function_arn
+  lambda_permission_allow_execution = module.lambda.lambda_permission_allow_execution
 }
 
 module "sns" {
@@ -31,7 +33,7 @@ module "ssm" {
 
 module "iam" {
   source                 = "./iam"
-  expected-bucket-arn    = "${module.s3.s3_bucket_arn}/*"
+  expected_bucket_arn    = "${module.s3.s3_bucket_arn}/*"
   expected_sns_topic_arn = module.sns.sns_topic_arn
 }
 

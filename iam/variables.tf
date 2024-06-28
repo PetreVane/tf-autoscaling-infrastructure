@@ -1,5 +1,5 @@
 
-variable "expected-bucket-arn" {
+variable "expected_bucket_arn" {
   type = string
   description = "The arn of the bucket on which the permission policy applies"
 }
