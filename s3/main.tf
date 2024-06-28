@@ -24,3 +24,16 @@ resource "aws_s3_object" "lambda_zip" {
   key    = "application/lambda/${var.lambda_zip_name}"
   source = var.lambda_zip_file_path  //"${path.module}/lambda/lambda.zip"
 }
+
+resource "aws_s3_bucket_notification" "tf_bucket_notification" {
+  bucket = aws_s3_bucket.tf_bucket.id
+
+  lambda_function {
+    lambda_function_arn = var.lambda_function_arn
+    events = ["s3:ObjectCreated:*"]
+    filter_prefix = "application/jar/"
+    filter_suffix = ".jar"
+  }
+
+  depends_on = [var.lambda_permission_allow_execution]
+}
