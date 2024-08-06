@@ -16,6 +16,7 @@ module "s3" {
 
 module "sns" {
   source = "./sns"
+  notification_email = "test@email.com" // modify this to receive emails
 }
 
 module "ssm" {
