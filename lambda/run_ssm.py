@@ -11,6 +11,9 @@ asg_client = boto3.client('autoscaling')
 ec2_client = boto3.client('ec2')
 
 def handler(event, context):
+    bucket = event['Records'][0]['s3']['bucket']['name']
+    key = event['Records'][0]['s3']['object']['key']
+    jar_filename = key.split('/')[-1]  # Extract just the filename
     asg_name = os.environ['asg_name']
     ssm_document_name = os.environ['ssm_document_name']
     sns_topic_arn = os.environ['sns_topic_arn']
@@ -33,9 +36,13 @@ def handler(event, context):
         response = ssm_client.send_command(
             InstanceIds=valid_instance_ids,
             DocumentName=ssm_document_name,
+            Parameters={
+                'bucketName': [bucket],
+                'jarKey': [jar_filename]
+            },
             Comment='Triggered by S3 Upload'
         )
-        message = f'SSM Document {ssm_document_name} executed successfullu on instance of ASG {asg_name}'
+        message = f'SSM Document {ssm_document_name} executed successfully on all instances of ASG {asg_name}'
         logger.info(message)
 
         # Send notification
@@ -49,7 +56,6 @@ def handler(event, context):
     except Exception as e:
         error_message = f"Error executing SSM document {ssm_document_name} on instances of ASG {asg_name}: {str(e)}"
         logger.error(error_message)
-
         # Send notification
         sns_client.publish(
             TopicArn=sns_topic_arn,

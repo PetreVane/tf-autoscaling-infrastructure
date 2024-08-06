@@ -4,18 +4,19 @@ provider "aws" {
 
 
 module "s3" {
-  source        = "./s3"
-  bucket_name   = "tf-bucket-${var.region}"
-  jar_file_name = "dummy-webapp.jar"
-  jar_file_path = "./s3/jar/dummy-webapp.jar"
-  lambda_zip_name = module.lambda.lambda_zip_file_name
-  lambda_zip_file_path = "./s3/lambda/lambda.zip"
-  lambda_function_arn = module.lambda.lambda_function_arn
+  source                            = "./s3"
+  bucket_name                       = "tf-bucket-${var.region}"
+  jar_file_name                     = "dummy-webapp.jar"
+  jar_file_path                     = "./s3/jar/dummy-webapp.jar"
+  lambda_zip_name                   = module.lambda.lambda_zip_file_name
+  lambda_zip_file_path              = "./s3/lambda/lambda.zip"
+  lambda_function_arn               = module.lambda.lambda_function_arn
   lambda_permission_allow_execution = module.lambda.lambda_permission_allow_execution
 }
 
 module "sns" {
   source = "./sns"
+  notification_email = "test@email.com" // modify this to receive emails
 }
 
 module "ssm" {
@@ -29,10 +30,10 @@ module "iam" {
 }
 
 module "vpc" {
-  source       = "./vpc"
-  vpc_cidr     = "10.0.0.0/16"
-  subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  region       = var.region
+  source            = "./vpc"
+  vpc_cidr          = "10.0.0.0/16"
+  subnet_cidrs      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  region            = var.region
   availability_zone = ["${var.region}a", "${var.region}b", "${var.region}c"]
 }
 
@@ -95,4 +96,11 @@ module "lambda" {
   bucket_arn              = module.s3.s3_bucket_arn
   s3_bucket_id            = module.s3.bucket_id
   s3_key                  = module.s3.lambda_file_key
+}
+
+module "github" {
+  source        = "./github"
+  s3_bucket_arn = module.s3.s3_bucket_arn
+  s3_bucket_id  = module.s3.bucket_id
+  region        = var.region
 }
