@@ -94,15 +94,26 @@ resource "aws_iam_policy" "github_upload_to_s3" {
     Statement = [
       {
         Effect = "Allow",
-        Action = [
+        "Action": [
           "s3:ListBucket",
+          "s3:GetBucketLocation"
+        ],
+        Resource: "${var.s3_bucket_arn}",
+
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
           "s3:PutObject",
-          "s3:DeleteObject"
-        ]
-        Resource = [
-          "${var.s3_bucket_arn}",
-          "${var.s3_bucket_arn}/application/jar/${var.jar_file_name}"
-        ]
+          "s3:DeleteObject",
+          "s3:CreateMultipartUpload",
+          "s3:AbortMultipartUpload",
+          "s3:CompleteMultipartUpload",
+          "s3:ListMultipartUploadParts",
+          "s3:ListBucketMultipartUploads"
+        ],
+        "Resource": "${var.s3_bucket_arn}/application/jar/${var.jar_file_name}"
       },
       {
         Effect = "Allow",

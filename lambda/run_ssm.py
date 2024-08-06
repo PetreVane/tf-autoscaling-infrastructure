@@ -36,6 +36,10 @@ def handler(event, context):
         response = ssm_client.send_command(
             InstanceIds=valid_instance_ids,
             DocumentName=ssm_document_name,
+            Parameters={
+                'bucketName': [bucket],
+                'jarKey': [jar_filename]
+            },
             Comment='Triggered by S3 Upload'
         )
         message = f'SSM Document {ssm_document_name} executed successfully on all instances of ASG {asg_name}'
