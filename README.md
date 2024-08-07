@@ -35,7 +35,6 @@ Before deploying this Terraform project, you need to have the following:
 
 - **EC2 Instances via Launch Template**:
     - Used for templating application servers.
-    - Runs a bash script to fetch and run the latest application artifact from S3.
 
 - **Auto Scaling Group**: Manages the scaling of EC2 instances based on defined criteria.
 
@@ -54,19 +53,26 @@ Before deploying this Terraform project, you need to have the following:
 - **Simple Notification Service (SNS)**:
     - Sends notifications about Lambda function execution failures.
 
+- **GitHub Module**:
+    - Sets up IAM roles and policies for GitHub Actions.
+    - Creates an OIDC provider for secure authentication between GitHub and AWS.
+    - Configures SSM parameters to store important information like role ARNs and S3 bucket names.
+    - Enables GitHub Actions to securely deploy to AWS without storing long-lived credentials.
+
 ## Continuous Deployment Pipeline
 
 The project now includes a continuous deployment pipeline:
 
 1. Application code is stored in a separate GitHub repository.
 2. When changes are pushed, a GitHub Actions workflow is triggered.
-3. The workflow builds the application artifact and copies it to the S3 bucket.
-4. S3 upload triggers the Lambda function.
-5. Lambda function uses SSM to update all running EC2 instances with the new application version.
+3. The workflow uses the IAM role created by the GitHub module to authenticate with AWS.
+4. The workflow builds the application artifact and copies it to a S3 bucket.
+5. S3 upload triggers a Lambda function.
+6. Lambda function uses SSM to update all running EC2 instances with the new application version.
 
 ## Repository Structure
 
-- `/modules`: Contains Terraform modules for each component (S3, IAM, VPC, Security Groups, Launch Template, Auto Scaling Group, ALB, Lambda, SSM, SNS).
+- `/modules`: Contains Terraform modules for each component (S3, IAM, VPC, Security Groups, Launch Template, Auto Scaling Group, ALB, Lambda, SSM, SNS, GitHub).
 - `/main.tf`: The root Terraform configuration file that calls modules and integrates components.
 - `/variables.tf`: Defines variables used in main Terraform configurations.
 - `/outputs.tf`: Manages output configurations that are important post-deployment.
@@ -76,46 +82,43 @@ The project now includes a continuous deployment pipeline:
 To use this project, follow these steps:
 
 1. **Clone the Repository:**
-   ```
+
    git clone git@github.com:PetreVane/tf-autoscaling-infrastructure.git
    cd tf-autoscaling-infrastructure
-   ```
+
 
 2. **Initialize Terraform:**
-   ```
+
    terraform init
-   ```
 
 3. **Plan the Deployment:**
-   ```
+
    terraform plan
-   ```
 
 4. **Apply the Configuration:**
-   ```
+
    terraform apply
-   ```
 
 5. **Check the Outputs:**
    Once applied, go to your AWS web console and inspect the newly created infrastructure.
 
 6. **Set Up GitHub Actions:**
-   In your application code repository, set up the GitHub Actions workflow to build and upload the artifact to the S3 bucket when changes are pushed.
+   In your application code repository, set up the GitHub Actions workflow to use the IAM role created by the GitHub module. Use the SSM parameters to retrieve necessary information like the role ARN and S3 bucket name.
 
 7. **Destroy (if needed):**
-   ```
+
    terraform destroy
-   ```
 
 ## Recent Updates
 
 - Added Lambda function to handle automatic updates of EC2 instances.
 - Integrated S3 bucket notifications to trigger Lambda function on new uploads.
 - Created SSM documents for remote execution of update commands on EC2 instances.
-- Added SNS topic for error notifications from Lambda function.
+- Added SNS topic for execution notifications from Lambda function.
 - Updated IAM roles and policies to support new components and their interactions.
-- Not yet: ~~Implemented continuous deployment pipeline using GitHub Actions and S3 triggers~~.
+- Implemented GitHub module for secure integration with GitHub Actions.
+- Set up continuous deployment pipeline using GitHub Actions and S3 triggers.
 
 ## Note
 
-Ensure all necessary permissions are set up correctly in AWS and that your GitHub repository has the required secrets for AWS authentication in GitHub Actions.
+Ensure all necessary permissions are set up correctly in AWS and that your GitHub repository has the required configuration for AWS authentication using the OIDC provider set up by the GitHub module. These include setting up 2 secrets in Github, such as AWS ACCOUNT ID and a default AWS Region, where the infrastructure will be deployed first time.
