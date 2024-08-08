@@ -21,7 +21,7 @@ Before deploying this Terraform project, you need to have the following:
 ## Infrastructure Components
 
 - **S3 Bucket**:
-    - Stores application artifacts and Lambda function code.
+    - Stores application artefacts and Lambda function code.
     - Triggers Lambda function on new uploads.
 
 - **IAM Roles and Policies**:
@@ -51,7 +51,7 @@ Before deploying this Terraform project, you need to have the following:
     - Allows remote execution of commands on EC2 instances.
 
 - **Simple Notification Service (SNS)**:
-    - Sends notifications about Lambda function execution failures.
+    - Sends notifications about Lambda function execution results.
 
 - **GitHub Module**:
     - Sets up IAM roles and policies for GitHub Actions.
@@ -63,7 +63,7 @@ Before deploying this Terraform project, you need to have the following:
 
 The project now includes a continuous deployment pipeline:
 
-1. Application code is stored in a separate GitHub repository.
+1. Application code is stored in a separate [GitHub repository](https://github.com/PetreVane/dummy-app)
 2. When changes are pushed, a GitHub Actions workflow is triggered.
 3. The workflow uses the IAM role created by the GitHub module to authenticate with AWS.
 4. The workflow builds the application artifact and copies it to a S3 bucket.
