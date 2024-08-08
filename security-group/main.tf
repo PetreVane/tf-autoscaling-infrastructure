@@ -7,8 +7,8 @@ resource "aws_security_group" "tf-security-group" {
   // Inbound rule for HTTP traffic on port 8080
   ingress {
     description = "HTTP"
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = var.port
+    to_port     = var.port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

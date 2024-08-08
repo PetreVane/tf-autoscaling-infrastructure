@@ -8,7 +8,6 @@ variable "vpc-id" {
 variable "port" {
   type = number
   description = "The port on which the target group will redirect connections"
-  default = 8080
 }
 
 variable "protocol" {

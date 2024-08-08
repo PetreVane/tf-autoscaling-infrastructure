@@ -1,6 +1,7 @@
 import boto3
 import os
 import logging
+from datetime import datetime
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -42,6 +43,14 @@ def handler(event, context):
             },
             Comment='Triggered by S3 Upload'
         )
+
+        # Extract relevant information from response and convert to JSON serializable format
+        serialized_response = {
+            'CommandId': response['Command']['CommandId'],
+            'ExpiresAfter': response['Command']['ExpiresAfter'].strftime('%Y-%m-%dT%H:%M:%SZ') if 'ExpiresAfter' in response['Command'] else None,
+            'DocumentName': response['Command']['DocumentName']
+        }
+
         message = f'SSM Document {ssm_document_name} executed successfully on all instances of ASG {asg_name}'
         logger.info(message)
 
@@ -51,7 +60,11 @@ def handler(event, context):
             Message=message,
             Subject='SSM Execution Success'
         )
-        return response
+
+        return {
+            'statusCode': 200,
+            'body': serialized_response
+        }
 
     except Exception as e:
         error_message = f"Error executing SSM document {ssm_document_name} on instances of ASG {asg_name}: {str(e)}"

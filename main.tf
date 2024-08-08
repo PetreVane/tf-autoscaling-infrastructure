@@ -15,7 +15,7 @@ module "s3" {
 }
 
 module "sns" {
-  source = "./sns"
+  source             = "./sns"
   notification_email = "test@email.com" // modify this to receive emails
 }
 
@@ -40,6 +40,7 @@ module "vpc" {
 module "security-group" {
   source = "./security-group"
   vpc_id = module.vpc.vpc_id
+  port   = var.port
 }
 
 module "launch-template" {
@@ -66,13 +67,14 @@ module "autoscaling-group" {
 module "target-group" {
   source = "./target-group"
   vpc-id = module.vpc.vpc_id
+  port   = var.port
 }
 
 module "application-load-balancer" {
   source            = "./load-balancer"
   security_group_id = module.security-group.aws_security_group_id
   subnet_ids        = module.vpc.subnets_ids
-  port              = 8080
+  port              = var.port
   target_group_arn  = module.target-group.target-group-arn
 }
 
