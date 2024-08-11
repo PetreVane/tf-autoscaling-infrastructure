@@ -161,3 +161,17 @@ resource "aws_ssm_parameter" "github_actions_region" {
     var.tags, {Name = "AWS region"}
   )
 }
+
+
+# Adds new entry in GitHub Actions secrets
+resource "github_actions_secret" "aws_account_id" {
+  repository       = var.github_repo
+  secret_name      = "AWS_ACCOUNT_ID"
+  plaintext_value  = data.aws_caller_identity.current_account_id.account_id
+}
+
+resource "github_actions_secret" "aws_region" {
+  repository  = var.github_repo
+  secret_name = "AWS_REGION"
+  plaintext_value = var.region
+}

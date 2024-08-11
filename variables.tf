@@ -14,3 +14,8 @@ variable "port" {
   type        = number
   default     = 80
 }
+
+variable "github_token" {
+  description = "Github access token"
+  type = string
+}
