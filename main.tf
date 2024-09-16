@@ -105,4 +105,5 @@ module "github" {
   s3_bucket_arn = module.s3.s3_bucket_arn
   s3_bucket_id  = module.s3.bucket_id
   region        = var.region
+  github_token = var.github_token
 }

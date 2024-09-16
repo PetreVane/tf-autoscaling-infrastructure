@@ -3,8 +3,13 @@ variable "region" {
   type = string
 }
 
+variable "github_token" {
+  description = "Github access token"
+  type = string
+}
+
 variable "github_repo" {
-  description = "The name of the Gihub repository where the actions workflow file is stored"
+  description = "The name of the Github repository where the actions workflow file is stored"
   type = string
   default = "PetreVane/dummy-app"
 }

@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
+  }
+}
+
+
+provider "github" {
+  token = var.github_token
+  owner = split("/", var.github_repo)[0]
+}
 
 /*
 This block defines local variables:
@@ -18,6 +32,7 @@ locals {
     data.aws_iam_openid_connect_provider.existing_github_provider[0].arn :
     null
   )
+  repository = split("/", var.github_repo)[1]
 }
 
 /*
@@ -163,15 +178,16 @@ resource "aws_ssm_parameter" "github_actions_region" {
 }
 
 
-# Adds new entry in GitHub Actions secrets
+# Adds new entry in GitHub Actions secrets -
+# If this fails, you have to add the secrets manually. Make sure your token has repo permissions
 resource "github_actions_secret" "aws_account_id" {
-  repository       = var.github_repo
+  repository       = local.repository
   secret_name      = "AWS_ACCOUNT_ID"
   plaintext_value  = data.aws_caller_identity.current_account_id.account_id
 }
 
 resource "github_actions_secret" "aws_region" {
-  repository  = var.github_repo
+  repository  = local.repository
   secret_name = "AWS_REGION"
   plaintext_value = var.region
 }
