@@ -31,8 +31,8 @@ module "iam" {
 
 module "vpc" {
   source            = "./vpc"
-  vpc_cidr          = "10.0.0.0/16"
-  subnet_cidrs      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  vpc_cidr          = "10.2.0.0/16"
+  subnet_cidrs      = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
   region            = var.region
   availability_zone = ["${var.region}a", "${var.region}b", "${var.region}c"]
 }
