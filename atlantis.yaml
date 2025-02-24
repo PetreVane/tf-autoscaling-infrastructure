@@ -1,11 +1,15 @@
 version: 3
 projects:
-  - name: "tf-autoscaling-insfrastructure"
+  - name: "tf-autoscaling-infrastructure"
     dir: "."
     autoplan:
-      when_modified: ["*.tf", "*.tfvars", "modules/**.tf"]
+      when_modified: ["*.tf", "*.tfvars", "modules/**/*.tf"]
       enabled: true
+    apply_requirements:
+      - approved
+      - mergeable
     workflow: "default"
+
 workflows:
   default:
     plan:
